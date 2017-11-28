@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<record_update table="sys_properties">
+    <sys_properties action="INSERT_OR_UPDATE">
+        <choices/>
+        <description/>
+        <ignore_cache>false</ignore_cache>
+        <is_private>false</is_private>
+        <name>x_85586_telegram_b.telegram.token</name>
+        <read_roles/>
+        <suffix>telegram.token</suffix>
+        <sys_class_name>sys_properties</sys_class_name>
+        <sys_created_by>admin</sys_created_by>
+        <sys_created_on>2017-11-28 19:56:49</sys_created_on>
+        <sys_customer_update>false</sys_customer_update>
+        <sys_id>10b499584f320300622238a18110c7d8</sys_id>
+        <sys_mod_count>0</sys_mod_count>
+        <sys_name>x_85586_telegram_b.telegram.token</sys_name>
+        <sys_package display_value="Telegram Bot" source="x_85586_telegram_b">b86f89544f320300622238a18110c7b5</sys_package>
+        <sys_policy/>
+        <sys_replace_on_upgrade>false</sys_replace_on_upgrade>
+        <sys_scope display_value="Telegram Bot">b86f89544f320300622238a18110c7b5</sys_scope>
+        <sys_update_name>sys_properties_10b499584f320300622238a18110c7d8</sys_update_name>
+        <sys_updated_by>admin</sys_updated_by>
+        <sys_updated_on>2017-11-28 19:56:49</sys_updated_on>
+        <type>string</type>
+        <value>471139263:AAGCFiKT1SeEBZwMKdwv8MI_uf7TN7xao1E</value>
+        <write_roles/>
+    </sys_properties>
+    <sys_translated_text action="delete_multiple" query="documentkey=10b499584f320300622238a18110c7d8"/>
+</record_update>
