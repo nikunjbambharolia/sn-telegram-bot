@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<record_update table="sys_ws_operation">
+    <sys_ws_operation action="INSERT_OR_UPDATE">
+        <active>true</active>
+        <consumes>application/json,application/xml,text/xml</consumes>
+        <consumes_customized>false</consumes_customized>
+        <default_operation_uri/>
+        <enforce_acl>cf9d01d3e73003009d6247e603f6a990</enforce_acl>
+        <http_method>POST</http_method>
+        <name>POST</name>
+        <operation_script><![CDATA[(function process(/*RESTAPIRequest*/ request, /*RESTAPIResponse*/ response) {
+
+	var answer = JSON.parse(request.body.dataString);
+	gs.log("!!!!!!" + JSON.stringify(answer));
+	
+
+ var reply_markup = JSON.stringify({
+    inline_keyboard: [
+	 //keyboard: [
+      [{ text: 'Мои тикеты', callback_data: 'MyTickets' }, { text: 'Тикеты моей группы', callback_data: 'MyGroupTuckets' }, { text: 'Активные' + '<br>'+ ' инциденты', callback_data: 'ActiveIncidents' }]//,
+     // [],
+	 // []
+    ]
+  });
+	
+	var ForceReply = JSON.stringify({force_reply: true});
+	
+	if (answer.message) {
+		var chat_id = answer.message.chat.id;
+		var name = answer.message.from.first_name;
+		if(answer.message.text.indexOf('/start') + 1) {
+			var sm = new sn_ws.RESTMessageV2("Post to telegram", "GET"); 
+			sm.setQueryParameter('chat_id', chat_id);
+			sm.setQueryParameter('text', "hello");
+			//sm.setQueryParameter('parse_mode', "Markdown");
+			sm.setQueryParameter('reply_markup', reply_markup);
+			//sm.setQueryParameter('ForceReply', ForceReply);
+			var response2 = sm.execute();
+			gs.log(JSON.stringify(response2.getBody()));
+	} else if(answer.message.text.indexOf('/INC') + 1){
+		var chat_id3 = answer.message.chat.id;
+		var inc = new GlideRecord('incident');
+		inc.addQuery('number', answer.message.text.slice(1));
+		inc.query();
+		var insInfo = '';
+		if (inc.next()) {
+			insInfo = "<b>number: </b>" + inc.getDisplayValue('number') + '\n' 
+				+ "<b>Short description: </b>" + inc.getDisplayValue('short_description') + '\n' 
+				+ "<b>Description: </b>" + inc.getDisplayValue('description') + '\n' 
+				+ "<b>state: </b>" + inc.getDisplayValue('state') + '\n' 
+				+ "<b>category: </b>" + inc.getDisplayValue('category') + '\n' 
+				+ "<b>Assigned to: </b>" + inc.getDisplayValue('assigned_to') + '\n' 
+				+ "<b>Assignment group: </b>" + inc.getDisplayValue('assignment_group');
+		}
+		var sm3 = new sn_ws.RESTMessageV2("Post to telegram", "GET"); 
+			sm3.setQueryParameter('chat_id', chat_id3);
+			sm3.setQueryParameter('text', insInfo);
+			sm3.setQueryParameter('parse_mode', "HTML");
+			//sm3.setQueryParameter('reply_markup', reply_markup);
+			//sm.setQueryParameter('ForceReply', ForceReply);
+			var response3 = sm3.execute();
+			gs.log(JSON.stringify(response3.getBody()));
+	}
+	}
+	if(answer.callback_query){
+		var chat_id2 = answer.callback_query.message.chat.id;
+		if(answer.callback_query.data == 'MyTickets' || answer.callback_query.data == 'MyGroupTuckets' || answer.callback_query.data == 'ActiveIncidents') {
+			if(answer.callback_query.data == 'ActiveIncidents') {
+				var incidents = '';
+				var gr = new GlideRecord('incident');
+				gr.addQuery('active', true);
+				gr.query();
+				while(gr.next()) {
+					incidents += "/"+gr.getValue('number') + ' - '+ gr.getValue('short_description') + '\n';
+				}
+			}
+		var sm2 = new sn_ws.RESTMessageV2("Post to telegram", "GET"); 
+		sm2.setQueryParameter('chat_id', chat_id2);
+			if(answer.callback_query.data == 'ActiveIncidents') {
+				sm2.setQueryParameter('text', incidents);
+			} else {
+				sm2.setQueryParameter('text', "Вы нажали кнопку "+ answer.callback_query.data);
+			}
+		//sm.setQueryParameter('reply_markup', reply_markup);
+		var response3 = sm2.execute();
+		gs.log(JSON.stringify(response3.getBody()));
+	}
+	}
+	
+	
+
+})(request, response);]]></operation_script>
+        <operation_uri>/api/x_85586_telegram_b/telegram</operation_uri>
+        <produces>application/json,application/xml,text/xml</produces>
+        <produces_customized>false</produces_customized>
+        <relative_path>/</relative_path>
+        <request_example/>
+        <requires_acl_authorization>true</requires_acl_authorization>
+        <requires_authentication>false</requires_authentication>
+        <short_description/>
+        <sys_class_name>sys_ws_operation</sys_class_name>
+        <sys_created_by>admin</sys_created_by>
+        <sys_created_on>2017-11-28 19:36:58</sys_created_on>
+        <sys_customer_update>false</sys_customer_update>
+        <sys_id>c1501d944f320300622238a18110c745</sys_id>
+        <sys_mod_count>0</sys_mod_count>
+        <sys_name>POST</sys_name>
+        <sys_package display_value="Telegram Bot" source="x_85586_telegram_b">b86f89544f320300622238a18110c7b5</sys_package>
+        <sys_policy/>
+        <sys_replace_on_upgrade>false</sys_replace_on_upgrade>
+        <sys_scope display_value="Telegram Bot">b86f89544f320300622238a18110c7b5</sys_scope>
+        <sys_update_name>sys_ws_operation_c1501d944f320300622238a18110c745</sys_update_name>
+        <sys_updated_by>admin</sys_updated_by>
+        <sys_updated_on>2017-11-28 19:36:58</sys_updated_on>
+        <web_service_definition display_value="Telegram">3effc5944f320300622238a18110c789</web_service_definition>
+        <web_service_version/>
+    </sys_ws_operation>
+</record_update>
